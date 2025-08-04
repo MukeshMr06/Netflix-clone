@@ -28,14 +28,12 @@ const Home = () => {
               <button className='border-0 outline-0 px-2 py-1 inline-flex items-center gap-5 font-bold text-[#fff] bg-[#6d6d6eb3] rounded cursor-pointer'><img src={info_icon} alt="" className='w-[25px]'/>More info</button>
             </div>
 
-            <Titlecard />
+           
         </div>
       </div>
       <div className="more-card px-6">
         <Titlecard title={"Blockbuster Movies"} category={"top_rated"}/>
-        <Titlecard title={"Only on Netflix"} category={"popular"}/>
-        <Titlecard title={"Upcoming"} category={"upcoming"}/>
-        <Titlecard title={"Top pics for you"} category={"now_playing"}/>
+        
 
       </div>
 

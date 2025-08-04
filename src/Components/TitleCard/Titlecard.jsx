@@ -1,56 +1,60 @@
-import React, { useEffect, useRef, useState } from 'react'
-import './Titlecard.css'
-import cards_data from '../../assets/cards/Cards_data'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  Originals,
+  popular,
+  Adventure,
+  Horror,
+  comedy,
+  suspense,
+  past,
+  Action,
+  Romantic,
+} from './Movielist';
 
+const categories = [
+  { title: 'Netflix Originals', movies: Originals, imageSizeLarge: 'h-64 w-56', imageSizeSmall: 'h-20 w-24' },
+  { title: 'Popular on Netflix', movies: popular, imageSizeLarge: 'w-72 h-40', imageSizeSmall: 'h-20 w-24' },
+  { title: 'Released in the past year', movies: past, imageSizeLarge: 'w-72 h-40', imageSizeSmall: 'h-20 w-24' },
+  { title: 'Action movies', movies: Action, imageSizeLarge: 'w-72 h-40', imageSizeSmall: 'h-20 w-24' },
+  { title: 'Romantic movies', movies: Romantic, imageSizeLarge: 'w-72 h-40', imageSizeSmall: 'h-20 w-24' },
+  { title: 'Adventure movies', movies: Adventure, imageSizeLarge: 'w-72 h-40', imageSizeSmall: 'h-20 w-24' },
+  { title: 'Horror movies', movies: Horror, imageSizeLarge: 'w-72 h-40', imageSizeSmall: 'h-20 w-24' },
+  { title: 'Comedy movies', movies: comedy, imageSizeLarge: 'w-72 h-40', imageSizeSmall: 'h-20 w-24' },
+  { title: 'Suspenseful movies', movies: suspense, imageSizeLarge: 'w-72 h-40', imageSizeSmall: 'h-20 w-24' },
+];
 
-const Titlecard = ({ title, category }) => {
-
-  const [apiData,setApiData] = useState([])
-  const cardref = useRef();
-
-
-  const options = {
-    method: 'GET',
-    headers: {
-      accept: 'application/json',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzAwYWIzZjhjMTgwODIwMmYzODVmYjJlY2MxOWQ2NiIsIm5iZiI6MTc1MjE1Mjk5OC44NzksInN1YiI6IjY4NmZiYmE2YmI2NGY3N2Y0NTcwM2Y1ZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.1-bUip3_P-mWeeXIa8ThIfdBs58Fx8WucTiv99EtIPc'
-    }
-  };
-
-
-  const handleWheel = (event) => {
-    event.preventDefault();
-    cardref.current.scrollLeft += event.deltaY;
-  }
+const Titlecard = () => {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
-    fetch(`https://api.themoviedb.org/3/movie/${category?category:"now_playing"}?language=en-US&page=1`, options)
-      .then(res => res.json())
-      .then(res => setApiData(res.results))
-      .catch(err => console.error(err));
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
 
-    cardref.current.addEventListener('wheel', handleWheel);
-  }, [])
+    window.addEventListener('resize', handleResize);  
 
-
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+  
   return (
-    <div className='title-card w-full'>
-      <h2>{title ? title : "Popular on Netflix"}</h2>
+    <div className='w-full h-full pt-4 bg-[#181818]'>
+      {categories.map((category, categoryIndex) => (
+        <div key={categoryIndex}>
+          <h1 className='text-xl capitalize mt-5 pl-5'>{category.title}</h1>
 
-      <div
-        className="card-list flex gap-4 mt-6 overflow-x-auto scroll-smooth"
-        ref={cardref}
-      >
-        {apiData.map((card, index) => (
-          <Link to={`/player/${card.id}`} className="card min-w-[250px] max-w-[300px]" key={index}>
-            <img className="w-full h-auto rounded-lg" src={`https://image.tmdb.org/t/p/w500`+card.backdrop_path} alt={card.name} />
-            <p className="text-white mt-2">{card.original_title}</p>
-          </Link>
-        ))}
-      </div>
+          <div className='flex gap-5 p-2 mt-2 scroll-hide-scrollbar'>
+            {category.movies.map((movie, movieIndex) => (
+              <img key={movieIndex} src={movie.img} alt='netflix original' 
+              className={`object-cover ${windowWidth < 640 ? category.imageSizeSmall : category.imageSizeLarge} transition duration-200  ease-in transform hover:scale-105`} loading='lazy'/>
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
-  )
-}
+  );
 
-export default Titlecard
+};
+
+export default Titlecard;
