@@ -4,7 +4,7 @@ import { addDoc, collection, getFirestore } from "firebase/firestore";
 import { toast } from "react-toastify";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyC3L0Bgx9nlpg_i53SqWdWCKYK5u2ubIrw",
+    // apiKey: "AIzaSyC3L0Bgx9nlpg_i53SqWdWCKYK5u2ubIrw",
     authDomain: "netfilx-clone-9c754.firebaseapp.com",
     projectId: "netfilx-clone-9c754",
     storageBucket: "netfilx-clone-9c754.firebasestorage.app",
